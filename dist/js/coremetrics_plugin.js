@@ -9,8 +9,12 @@
     // get current host
     var host = window.location.host;
 
-    // production url
-    const PRODUCTION_URL = "www.bloomingdales.com";
+    // production urls
+    const PRODUCTION_URLS = [
+        'fashion.bloomingdales.com',
+        'www.bloomingdales.com',
+        'm.bloomingdales.com'
+    ];
 
     $.extend($, {
         // create instance
@@ -76,7 +80,7 @@
                     return cmSetTest();
                 }
                 else if (env === 'production') {
-                    if (host === PRODUCTION_URL) {
+                    if (PRODUCTION_URLS.indexOf(path) >= 0) {
                         return cmSetProduction();
                     }
                     else {
@@ -117,7 +121,7 @@
 
             // logger
             function log(msg) {
-                if (window.console && host != PRODUCTION_URL) {
+                if (window.console && PRODUCTION_URLS.indexOf(path) === -1) {
                     console.log(msg);
                 }
             }

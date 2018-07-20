@@ -51,7 +51,6 @@ gulp.task('clean', function () {
  
 gulp.task('scripts', function() {
   return gulp.src(['./src/js/coremetrics_plugin.js', './src/js/main.js'])
-    .pipe(concat('app.js'))
     .pipe(gulp.dest('./dist/js/'))
     .pipe(reload({ stream:true }));
 });

@@ -22,9 +22,20 @@ $(function() {
 		id: "test-page-id",
 		cat: "another-category-id"
 	});
+
 	// (if cat is omitted it will use default)
 	c.fire({
-		type: "page", 
+		type: "element", 
 		id: "test-page-id"
+	});
+
+	// firing without id will throw error
+	c.fire({
+		id: "test-id-without-cat-or-type"
+	});
+
+	// firing without id will throw error
+	c.fire({
+		cat: "new-category"
 	});
 });

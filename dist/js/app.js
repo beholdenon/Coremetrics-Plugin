@@ -95,7 +95,7 @@
                         fireTag({
                             type: 'element',
                             id: $( this ).attr( "coremetricTag" ),
-                            cat:options.category_id
+                            cat: options.category_id
                         });
                     });
                 }
@@ -125,18 +125,28 @@
             // method to fire tags (cat is optional)
             function fireTag(params) {
                 if(coremetrics) {
-                    var cat = params.cat || options.category_id;
-                    switch(params.type) {
-                        case "page":
-                            cmCreatePageviewTag(params.id, cat);
-                        break;
-                        case "element":
-                            cmCreatePageElementTag(params.id, cat);
-                        break;
+                    if(params) {
+                        var cat = params.cat || options.category_id;
+                        var id = params.id;
+                        if(id) {
+                            switch(params.type) {
+                                case "element":
+                                    cmCreatePageElementTag(id, cat);
+                                break;
+                                default:
+                                    cmCreatePageviewTag(id, cat);
+                            }
+                        }
+                        else {
+                            log("ERROR: No id specified (from fireTag Method)");
+                        }
+                    }
+                    else {
+                        log("ERROR: Parameters not set (from fireTag Method)");
                     }
                 }
                 else {
-                    log("Cannot fire " + params.type + " because coremetrics not found: " + params.id);
+                    log("ERROR: Coremetrics not found (from fireTag Method)");
                 }
             }
 
@@ -225,9 +235,20 @@ $(function() {
 		id: "test-page-id",
 		cat: "another-category-id"
 	});
+
 	// (if cat is omitted it will use default)
 	c.fire({
-		type: "page", 
+		type: "element", 
 		id: "test-page-id"
+	});
+
+	// firing without id will throw error
+	c.fire({
+		id: "test-id-without-cat-or-type"
+	});
+
+	// firing without id will throw error
+	c.fire({
+		cat: "new-category"
 	});
 });

@@ -1,14 +1,40 @@
 (function($) {
+
+    // whether or not connection to coremetrics library is succesful
     var coremetrics = false;
+
+    // env either production or dev
     var env = window.ENV_CONFIG || 'dev';
+
+    // get current host
+    var host = window.location.host;
+
+    // production url
+    const PRODUCTION_URL = "www.bloomingdales.com";
+
     $.extend($, {
+        // create instance
         coremetrics: function(options) {
-            options = $.extend({
+            var defaults = {
+                // defeault cat id
                 category_id: '',
+
+                // default page id's for onLoad tags
                 page_paths: {},
-                call_page_tags: true
-            }, options);
+
+                // control whether or not onLoad page tags fire
+                call_page_tags: true,
+
+                // use html attributes for element tags
+                use_attribute_tags: true
+            }
+
+            // handle defaults and user settings
+            options = $.extend(defaults, options);
+
+            // init called when plugin instance is created 
             function init() {
+                // check to see if coremetric library connected
                 coremetrics = checkForCoremetrics();
                 if(coremetrics) {
                     log("Coremetrics Initiated");
@@ -23,9 +49,12 @@
                     initPageLoadCall();
                 }
                 else {
-                    log("Coremetrics Not Found");
+                    // could not connect to coremetrics
+                    log("ERROR: Could not find coremetrics library (from init method)");
                 }
             }
+
+            // test connection to bloomies and  coremetrics
             function checkForCoremetrics() {
                 try {
                     if(window.BLOOMIES && window.BLOOMIES.coremetrics) {
@@ -36,15 +65,18 @@
                     }
                 }
                 catch (e) {
+                    log("ERROR: Could not find coremetrics library (from checkForCoremetrics method): " + e);
                     return false;
                 }
             }
+
+            // setup dev or production environment
             function initEnvironment() {
                 if (env === 'dev') {
                     return cmSetTest();
                 }
                 else if (env === 'production') {
-                    if (window.location.host === 'www.bloomingdales.com') {
+                    if (host === PRODUCTION_URL) {
                         return cmSetProduction();
                     }
                     else {
@@ -52,42 +84,63 @@
                     }
                 }
                 else {
-                    throw 'ERROR: unidentified env variable';
+                    throw 'ERROR: Unidentified env variable (from initEnvironment method)';
                 }
             }
+
+            // setup
             function initAttributeListener() {
-                $('[coremetricTag]').click(function() {
-                    fireTag('element', $( this ).attr( "coremetricTag" ), options.category_id);
-                });
+                if(options.use_attribute_tags) {
+                    $('[coremetricTag]').click(function() {
+                        fireTag({
+                            type: 'element',
+                            id: $( this ).attr( "coremetricTag" ),
+                            cat:options.category_id
+                        });
+                    });
+                }
             }
+
+            // setup page id's firing on page load
             function initPageLoadCall() {
                 if(options.page_paths != {} && options.call_page_tags) {
                     var page = options.page_paths[path()];
                     if(page != undefined) {
-                       fireTag("page", page, options.category_id);
+                       fireTag({
+                            type: "page",
+                            id: page,
+                            cat: options.category_id
+                        });
                     }
                 }
             }
+
+            // logger
             function log(msg) {
-                if (window.console) {
+                if (window.console && host != PRODUCTION_URL) {
                     console.log(msg);
                 }
             }
-            function fireTag(type, id, cat) {
+
+            // method to fire tags (cat is optional)
+            function fireTag(params) {
                 if(coremetrics) {
-                    switch(type) {
+                    var cat = params.cat || options.category_id;
+                    switch(params.type) {
                         case "page":
-                            cmCreatePageviewTag(id, cat || options.category_id);
+                            cmCreatePageviewTag(params.id, cat);
                         break;
                         case "element":
-                            cmCreatePageElementTag(id, cat || options.category_id);
+                            cmCreatePageElementTag(params.id, cat);
                         break;
                     }
                 }
                 else {
-                    log("Cannot fire " + type + " because coremetrics not found: " + id);
+                    log("Cannot fire " + params.type + " because coremetrics not found: " + params.id);
                 }
             }
+
+            // call page view tag 
             function cmCreatePageviewTag(id, cat) {
                 try {
                     window.BLOOMIES.coremetrics.cmCreatePageviewTag(id, cat, '', '');
@@ -96,6 +149,8 @@
                     log("cmCreatePageviewTag Error: " + e);
                 }
             }
+
+            // call element tag
             function cmCreatePageElementTag(id, cat) {
                 try {
                     window.BLOOMIES.coremetrics.cmCreatePageElementTag(id, cat);
@@ -104,6 +159,8 @@
                     log("cmCreatePageElementTag Error: " + e);
                 }
             }
+
+            // return current directory
             function path() {
                 var urlArr = window.location.pathname.split("/");
                 if( urlArr[urlArr.length - 1] === "" ) {
@@ -114,13 +171,17 @@
                 }
                 return window.location.pathname;
             }
+
+            // init
             init();
+
+            // public methods
             return {
                 init: function() {
                     init();
                 },
-                fire: function(type, tag, cat) {
-                    fireTag(type, tag, cat);
+                fire: function(params) {
+                    fireTag(params);
                 },
                 path: function() {
                     return path();

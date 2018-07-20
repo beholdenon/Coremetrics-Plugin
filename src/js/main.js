@@ -6,7 +6,8 @@ $(function() {
 			"": "landing-page",
 			"sample": "sample-page"
 		},
-		call_page_tags: false
+		call_page_tags: true,
+		use_attribute_tags: true
 	});
 	
 	// set category
@@ -16,6 +17,14 @@ $(function() {
 	// c.category_id();
 
 	// fire tag (type (page || element), id, cat)
+	c.fire({
+		type: "page",
+		id: "test-page-id",
+		cat: "another-category-id"
+	});
 	// (if cat is omitted it will use default)
-	c.fire("page", "test-page-id");
+	c.fire({
+		type: "page", 
+		id: "test-page-id"
+	});
 });

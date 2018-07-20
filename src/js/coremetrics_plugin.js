@@ -7,7 +7,7 @@
     var env = window.ENV_CONFIG || 'dev';
 
     // get current host
-    var host = window.location.host;
+    const HOST = window.location.host;
 
     // production urls
     const PRODUCTION_URLS = [
@@ -121,7 +121,7 @@
 
             // logger
             function log(msg) {
-                if (window.console && PRODUCTION_URLS.indexOf(path) === -1) {
+                if (window.console && PRODUCTION_URLS.indexOf(HOST) === -1) {
                     console.log(msg);
                 }
             }

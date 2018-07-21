@@ -50,7 +50,7 @@ gulp.task('clean', function () {
 });
  
 gulp.task('scripts', function() {
-  return gulp.src(['./src/js/coremetrics_plugin.js', './src/js/main.js'])
+  return gulp.src(['./src/js/coremetrics_plugin.js', './src/js/coremetrics_plugin_vanilla.js', './src/js/main.js'])
     .pipe(gulp.dest('./dist/js/'))
     .pipe(reload({ stream:true }));
 });

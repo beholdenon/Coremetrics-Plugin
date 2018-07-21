@@ -1,26 +1,26 @@
-(function(ns, undefined) {
+(function(ns) {
   
     // private variables
     // whether or not connection to coremetrics library is succesful
     var coremetrics = false;
 
     // env either production or dev
-    var env = window.ENV_CONFIG || 'dev';
+    var env = window.ENV_CONFIG || "dev";
 
     // get current host
     var host = window.location.host;
 
     // production urls
-    const PRODUCTION_URLS = [
-        'fashion.bloomingdales.com',
-        'www.bloomingdales.com',
-        'm.bloomingdales.com'
+    var PRODUCTION_URLS = [
+        "fashion.bloomingdales.com",
+        "www.bloomingdales.com",
+        "m.bloomingdales.com"
     ];
 
     //plugin defaults
     var options = {
         // defeault cat id
-        category_id: '',
+        category_id: "",
 
         // default page id's for onLoad tags
         page_paths: {},
@@ -30,7 +30,7 @@
 
         // use html attributes for element tags
         use_attribute_tags: true
-    }
+    };
 
     // private method to combine defaults and options
     function extend(a, b){
@@ -85,10 +85,10 @@
 
     // setup dev or production environment
     function initEnvironment() {
-        if (env === 'dev') {
+        if (env === "dev") {
             return cmSetTest();
         }
-        else if (env === 'production') {
+        else if (env === "production") {
             if (PRODUCTION_URLS.indexOf(path) >= 0) {
                 return cmSetProduction();
             }
@@ -97,14 +97,14 @@
             }
         }
         else {
-            throw 'ERROR: Unidentified env variable (from initEnvironment method)';
+            throw "ERROR: Unidentified env variable (from initEnvironment method)";
         }
     }
 
     // setup
     function initAttributeListener() {
         if(options.use_attribute_tags) {
-            var el = document.querySelectorAll('[coremetricTag]');
+            var el = document.querySelectorAll("[coremetricTag]");
 
             forEach(el, function (index, value) {
                 value.onclick = function(){
@@ -123,7 +123,7 @@
     function initPageLoadCall() {
         if(options.page_paths != {} && options.call_page_tags) {
             var page = options.page_paths[path()];
-            if(page != undefined) {
+            if(page !== undefined) {
                fireTag({
                     type: "page",
                     id: page,
@@ -135,7 +135,7 @@
 
     // logger
     function log(msg) {
-        if (window.console && PRODUCTION_URLS.indexOf(path) === -1) {
+        if (window.console && PRODUCTION_URLS.indexOf(host) === -1) {
             console.log(msg);
         }
     }
@@ -171,7 +171,7 @@
     // call page view tag 
     function cmCreatePageviewTag(id, cat) {
         try {
-            window.BLOOMIES.coremetrics.cmCreatePageviewTag(id, cat, '', '');
+            window.BLOOMIES.coremetrics.cmCreatePageviewTag(id, cat, "", "");
             log("Coremetrics Page: Category: " + cat + " ID: " + id);
         } catch (e) {
             log("cmCreatePageviewTag Error: " + e);
@@ -204,10 +204,8 @@
     ns.coremetrics = function(settings) {
         options = extend(options, settings);
         init();
-    }
+    };
     ns.fireTag = function(params) {
         fireTag(params);
-    }
+    };
 })(window.blf = window.blf || {});
-
-

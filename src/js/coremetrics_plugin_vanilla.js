@@ -208,4 +208,18 @@
     ns.fireTag = function(params) {
         fireTag(params);
     };
+    ns.path = function() {
+        return path();
+    };
+    category_id = function(val) {
+        if(val) {
+            options.category_id = val;
+        }
+        else {
+            return options.category_id;
+        }
+    };
+    checkForCormetrics = function () {
+        return coremetrics();
+    };
 })(window.blf = window.blf || {});

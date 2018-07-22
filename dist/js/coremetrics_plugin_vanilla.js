@@ -140,31 +140,41 @@
         }
     }
 
+    // check the tags passed
+    function checkTag(params) {
+        if(!coremetrics) {
+            log("ERROR: Coremetrics library not found");
+            return false;
+        }
+        else if(params === undefined) {
+            log("ERROR: Params not set");
+            return false;
+        }
+        else if(params.id === undefined) {
+            log("ERROR: ID not set");
+            return false;
+        }
+        return true;
+    }
+
     // method to fire tags (cat is optional)
     function fireTag(params) {
-        if(coremetrics) {
-            if(params) {
-                var cat = params.cat || options.category_id;
-                var id = params.id;
-                if(id) {
-                    switch(params.type) {
-                        case "element":
-                            cmCreatePageElementTag(id, cat);
-                        break;
-                        default:
-                            cmCreatePageviewTag(id, cat);
-                    }
-                }
-                else {
-                    log("ERROR: No id specified (from fireTag Method)");
+        if(checkTag(params)) {
+            var cat = params.cat || options.category_id;
+            var id = params.id;
+            var type = params.type;
+            if(id) {
+                switch(type) {
+                    case "element":
+                        cmCreatePageElementTag(id, cat);
+                    break;
+                    default:
+                        cmCreatePageviewTag(id, cat);
                 }
             }
             else {
-                log("ERROR: Parameters not set (from fireTag Method)");
+                log("ERROR: No id specified (from fireTag Method)");
             }
-        }
-        else {
-            log("ERROR: Coremetrics not found (from fireTag Method)");
         }
     }
 
@@ -207,5 +217,19 @@
     };
     ns.fireTag = function(params) {
         fireTag(params);
+    };
+    ns.path = function() {
+        return path();
+    };
+    category_id = function(val) {
+        if(val) {
+            options.category_id = val;
+        }
+        else {
+            return options.category_id;
+        }
+    };
+    checkForCormetrics = function () {
+        return coremetrics();
     };
 })(window.blf = window.blf || {});

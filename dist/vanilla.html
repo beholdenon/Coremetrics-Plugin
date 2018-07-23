@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Coremetrics Vanilla JS</title>
+</head>
+
+<body>
+    <a href="#" coremetricTag="test-link-click">Test Link</a>
+    <br><br>
+    <a href="#" coremetricTag="test-link-click2">Test Link</a>
+
+    <script>
+        /* testing hack so application initiates coremetrics */
+        BLOOMIES = {};
+        BLOOMIES.coremetrics = {};
+        BLOOMIES.coremetrics.cmCreatePageviewTag = function() {}
+        BLOOMIES.coremetrics.cmCreatePageElementTag = function() {}
+        window.cmSetTest = function() {}
+        window.cmSetProduction = function() {}
+    </script>
+
+    <script src="js/coremetrics_plugin_vanilla.js"></script>
+    <script>
+        blf.coremetrics({
+            use_attribute_tags: true,
+            category_id: "test-cat-id"
+        });
+        blf.fireTag({
+            id: "test-id"
+        });
+        blf.fireTag({
+            id: "test-id",
+            cat: "another-set-cat"
+        });
+        blf.fireTag({
+            cat: "test"
+        });
+    </script>
+
+</body>
+
+</html>

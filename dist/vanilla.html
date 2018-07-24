@@ -29,6 +29,8 @@
             category_id: "test-cat-id"
         });
         console.log("libraryFound: " + core.libraryFound());
+        console.log("category id: " + core.category_id());
+        core.category_id("new-cat-id-from-method");
         core.fireTag({
             id: "test-id"
         });

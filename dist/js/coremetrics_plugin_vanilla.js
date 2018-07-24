@@ -1,8 +1,10 @@
+window.bl = window.bl || {};
+
 (function(ns) {
   
     // private variables
     // whether or not connection to coremetrics library is succesful
-    var coremetrics = false;
+    var libraryFound = false;
 
     // env either production or dev
     var env = window.ENV_CONFIG || "dev";
@@ -48,9 +50,9 @@
     // init called when plugin instance is created 
     function init() {
         // check to see if coremetric library connected
-        coremetrics = checkForCoremetrics();
-        if(coremetrics) {
-            log("Coremetrics Initiated");
+        libraryFound = checkForLibrary();
+        if(libraryFound) {
+            log("Library Initiated");
 
             // intial coremetrics setup
             initEnvironment();
@@ -68,7 +70,7 @@
     }
 
     // test connection to bloomies and  coremetrics
-    function checkForCoremetrics() {
+    function checkForLibrary() {
         try {
             if(window.BLOOMIES && window.BLOOMIES.coremetrics) {
                 return true;
@@ -142,7 +144,7 @@
 
     // check the tags passed
     function checkTag(params) {
-        if(!coremetrics) {
+        if(!libraryFound) {
             log("ERROR: Coremetrics library not found");
             return false;
         }
@@ -211,7 +213,7 @@
     }
 
     // public methods
-    ns.coremetrics = function(settings) {
+    ns.init = function(settings) {
         options = extend(options, settings);
         init();
     };
@@ -221,7 +223,7 @@
     ns.path = function() {
         return path();
     };
-    category_id = function(val) {
+    ns.category_id = function(val) {
         if(val) {
             options.category_id = val;
         }
@@ -229,7 +231,7 @@
             return options.category_id;
         }
     };
-    checkForCormetrics = function () {
-        return coremetrics();
+    ns.libraryFound = function () {
+        return libraryFound;
     };
-})(window.blf = window.blf || {});
+})(window.bl.coremetrics = window.bl.coremetrics || {});

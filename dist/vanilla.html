@@ -23,18 +23,20 @@
 
     <script src="js/coremetrics_plugin_vanilla.js"></script>
     <script>
-        blf.coremetrics({
+        var core = bl.coremetrics;
+        core.init({
             use_attribute_tags: true,
             category_id: "test-cat-id"
         });
-        blf.fireTag({
+        console.log("libraryFound: " + core.libraryFound());
+        core.fireTag({
             id: "test-id"
         });
-        blf.fireTag({
+        core.fireTag({
             id: "test-id",
             cat: "another-set-cat"
         });
-        blf.fireTag({
+        core.fireTag({
             cat: "test"
         });
     </script>

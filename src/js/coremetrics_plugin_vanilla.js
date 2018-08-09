@@ -87,6 +87,7 @@ window.bl = window.bl || {};
 
     // setup dev or production environment
     function initEnvironment() {
+        window.BLOOMIES.coremetrics.pageViewExploreAttributes = new window.BLOOMIES.coremetrics.exploreAttributes();
         if (env === "dev") {
             return cmSetTest();
         }

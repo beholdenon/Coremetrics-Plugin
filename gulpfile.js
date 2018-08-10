@@ -6,7 +6,7 @@ var htmlbeautify = require('gulp-html-beautify');
 var imagemin = require('gulp-imagemin');
 var del = require('del');
 var concat = require('gulp-concat');
-var nunjucksRender = require('gulp-nunjucks-render');
+var minify = require('gulp-minify');
 
 gulp.task('sass', function() {
   return sass('src/sass/*.scss')
@@ -34,12 +34,11 @@ gulp.task('serve', ['sass'], function() {
 
   gulp.watch('src/sass/*.scss', ['sass']);
   gulp.watch('src/html/*.html', ['html']);
-  gulp.watch('src/**/*.nunjucks', ['templates']);
-  gulp.watch('src/js/*.js', ['scripts']);
+  gulp.watch('src/js/*.js', ['scripts', 'compress']);
 });
 
 gulp.task('images', function() {
-	gulp.src('src/images/*')
+  gulp.src('src/images/*')
         .pipe(imagemin())
         .pipe(gulp.dest('dist/images'))
 });
@@ -48,7 +47,11 @@ gulp.task('clean', function () {
     'dist/**/*'
   ]);
 });
- 
+gulp.task('compress', function() {
+  gulp.src(['./src/js/*.js'])
+    .pipe(minify())
+    .pipe(gulp.dest('./dist/js/'))
+});
 gulp.task('scripts', function() {
   return gulp.src(['./src/js/coremetrics_plugin.js', './src/js/coremetrics_plugin_vanilla.js', './src/js/main.js'])
     .pipe(gulp.dest('./dist/js/'))
@@ -64,16 +67,6 @@ gulp.task('fonts', function() {
     .pipe(gulp.dest('./dist/fonts/'));
 });
 
-gulp.task('templates', function() {
-  // Gets .html and .nunjucks files in pages
-  return gulp.src('src/pages/**/*.+(html|nunjucks)')
-  // Renders template with nunjucks
-  .pipe(nunjucksRender({
-      path: ['src/templates']
-    }))
-  // output files in app folder
-  .pipe(gulp.dest('dist'))
-  .pipe(reload({ stream:true }));
-});
 
-gulp.task('default', ['sass', 'html', 'scripts', 'data', 'images', 'serve']);
+
+gulp.task('default', ['sass', 'html', 'scripts', 'compress', 'data', 'images', 'serve']);

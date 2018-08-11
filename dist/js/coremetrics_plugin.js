@@ -31,7 +31,10 @@ window.bl = window.bl || {};
         call_page_tags: true,
 
         // use html attributes for element tags
-        use_attribute_tags: true
+        use_attribute_tags: true,
+
+        // the name of the attribute tags
+        attribute_tag: "coremetricTag"
     };
 
     // private method to combine defaults and options
@@ -107,13 +110,13 @@ window.bl = window.bl || {};
     // setup
     function initAttributeListener() {
         if(options.use_attribute_tags) {
-            var el = document.querySelectorAll("[coremetricTag]");
+            var el = document.querySelectorAll("[" + options.attribute_tag + "]");
 
             forEach(el, function (index, value) {
                 value.onclick = function(){
                     fireTag({
                         type: 'element',
-                        id: value.getAttribute("coremetricTag"),
+                        id: value.getAttribute(options.attribute_tag),
                         cat: options.category_id
                     });
                 };

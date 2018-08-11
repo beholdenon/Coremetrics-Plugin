@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <a href="#" coremetricTag="test-link-click">Test Link</a>
+    <a href="#" coremetricTag="test-link-click" newTag="test2">Test Link</a>
     <br><br>
     <a href="#" coremetricTag="test-link-click2">Test Link</a>
 
@@ -27,7 +27,8 @@
         var core = bl.coremetrics;
         core.init({
             use_attribute_tags: true,
-            category_id: "test-cat-id"
+            category_id: "test-cat-id",
+            attribute_tag: "newTag"
         });
         console.log("libraryFound: " + core.libraryFound());
         console.log("category id: " +  core.category_id());

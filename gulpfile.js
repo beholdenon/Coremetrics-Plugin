@@ -4,7 +4,6 @@ var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 var htmlbeautify = require('gulp-html-beautify');
 var imagemin = require('gulp-imagemin');
-var del = require('del');
 var concat = require('gulp-concat');
 var minify = require('gulp-minify');
 
@@ -41,11 +40,6 @@ gulp.task('images', function() {
   gulp.src('src/images/*')
         .pipe(imagemin())
         .pipe(gulp.dest('dist/images'))
-});
-gulp.task('clean', function () {
-  return del([
-    'dist/**/*'
-  ]);
 });
 gulp.task('compress', function() {
   gulp.src(['./src/js/*.js'])

@@ -1,28 +1,54 @@
 <!DOCTYPE html>
 <html>
-	<head>
-	    <meta charset="UTF-8">
-	    <title>Scratch Pad</title>
-	    <link href="./css/app.css" rel="stylesheet" type="text/css">
-	</head>
- 	<body>
-		<a href="#" coremetricTag="test-link-click">Test Link</a>
 
-		<script>
-			/* testing hack so application initiates coremetrics */
-	    	BLOOMIES = {};
-	    	BLOOMIES.coremetrics = {};
-	    	BLOOMIES.coremetrics.cmCreatePageviewTag = function() {}
-	    	BLOOMIES.coremetrics.cmCreatePageElementTag = function() {}
-	    	window.cmSetTest = function() {
-	    	}
-	    	window.cmSetProduction = function() {
-	    	}
-	    </script>
+<head>
+    <meta charset="UTF-8">
+    <title>Coremetrics Plugin</title>
+</head>
 
-	    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
-	  	<script src="js/coremetrics_plugin.js"></script>
-	  	<script src="js/main.js"></script>
+<body>
+    <a href="#" coremetricTag="test-link-click">Test Link</a>
+    <br><br>
+    <a href="#" coremetricTag="test-link-click2">Test Link</a>
 
-	</body>
+    <script>
+        /* testing hack so application initiates coremetrics */
+        BLOOMIES = {};
+        BLOOMIES.coremetrics = {};
+        BLOOMIES.coremetrics.cmCreatePageviewTag = function() {};
+        BLOOMIES.coremetrics.cmCreatePageElementTag = function() {};
+        BLOOMIES.coremetrics.exploreAttributes = function() {};
+        window.cmSetTest = function() {}
+        window.cmSetProduction = function() {}
+    </script>
+
+    <script src="js/coremetrics_plugin.js"></script>
+    <script>
+        var core = bl.coremetrics;
+        core.init({
+            use_attribute_tags: true,
+            category_id: "test-cat-id"
+        });
+        console.log("libraryFound: " + core.libraryFound());
+        console.log("category id: " +  core.category_id());
+        core.category_id("new-cat-id-from-method");
+        
+        // ok uses default category
+        core.fireTag({
+            id: "test-id"
+        });
+
+        // ok
+        core.fireTag({
+            id: "test-id",
+            cat: "another-set-cat"
+        });
+        // error no id set
+        core.fireTag({
+            cat: "test"
+        });
+    </script>
+
+</body>
+
 </html>

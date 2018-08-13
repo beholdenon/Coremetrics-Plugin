@@ -1,6 +1,6 @@
 window.bl = window.bl || {};
 
-(function(ns) {
+(function(ns, bl) {
   
     // private variables
     // whether or not connection to coremetrics library is succesful
@@ -37,25 +37,12 @@ window.bl = window.bl || {};
         attribute_tag: "coremetricTag"
     };
 
-    // private method to combine defaults and options
-    function extend(a, b){
-        for(var key in b)
-        if(b.hasOwnProperty(key))
-        a[key] = b[key];
-        return a;
-    }
-    // forEach method, could be shipped as part of an Object Literal/Module
-    var forEach = function (array, callback, scope) {
-        for (var i = 0; i < array.length; i++) {
-            callback.call(scope, i, array[i]); // passes back stuff we need
-        }
-    };
     // init called when plugin instance is created 
     function init() {
         // check to see if coremetric library connected
         libraryFound = checkForLibrary();
         if(libraryFound) {
-            log("Library Initiated");
+            bl.utils.log("Library Initiated");
 
             // intial coremetrics setup
             initEnvironment();
@@ -68,7 +55,7 @@ window.bl = window.bl || {};
         }
         else {
             // could not connect to coremetrics
-            log("ERROR: Could not find coremetrics library (from init method)");
+            bl.utils.log("ERROR: Could not find coremetrics library (from init method)");
         }
     }
 
@@ -83,7 +70,7 @@ window.bl = window.bl || {};
             }
         }
         catch (e) {
-            log("ERROR: Could not find coremetrics library (from checkForCoremetrics method): " + e);
+            bl.utils.log("ERROR: Could not find coremetrics library (from checkForCoremetrics method): " + e);
             return false;
         }
     }
@@ -112,7 +99,7 @@ window.bl = window.bl || {};
         if(options.use_attribute_tags) {
             var el = document.querySelectorAll("[" + options.attribute_tag + "]");
 
-            forEach(el, function (index, value) {
+            window.bl.utils.forEach(el, function (index, value) {
                 value.onclick = function(){
                     fireTag({
                         type: 'element',
@@ -139,25 +126,18 @@ window.bl = window.bl || {};
         }
     }
 
-    // logger
-    function log(msg) {
-        if (window.console && PRODUCTION_URLS.indexOf(host) === -1) {
-            console.log(msg);
-        }
-    }
-
     // check the tags passed
     function checkTag(params) {
         if(!libraryFound) {
-            log("ERROR: Coremetrics library not found");
+            bl.utils.log("ERROR: Coremetrics library not found");
             return false;
         }
         else if(params === undefined) {
-            log("ERROR: Params not set");
+            bl.utils.log("ERROR: Params not set");
             return false;
         }
         else if(params.id === undefined) {
-            log("ERROR: ID not set");
+            bl.utils.log("ERROR: ID not set");
             return false;
         }
         return true;
@@ -179,7 +159,7 @@ window.bl = window.bl || {};
                 }
             }
             else {
-                log("ERROR: No id specified (from fireTag Method)");
+                bl.utils.log("ERROR: No id specified (from fireTag Method)");
             }
         }
     }
@@ -188,9 +168,9 @@ window.bl = window.bl || {};
     function cmCreatePageviewTag(id, cat) {
         try {
             window.BLOOMIES.coremetrics.cmCreatePageviewTag(id, cat, "", "");
-            log("Coremetrics Page: Category: " + cat + " ID: " + id);
+            bl.utils.log("Coremetrics Page: Category: " + cat + " ID: " + id);
         } catch (e) {
-            log("cmCreatePageviewTag Error: " + e);
+            bl.utils.log("cmCreatePageviewTag Error: " + e);
         }
     }
 
@@ -198,9 +178,9 @@ window.bl = window.bl || {};
     function cmCreatePageElementTag(id, cat) {
         try {
             window.BLOOMIES.coremetrics.cmCreatePageElementTag(id, cat);
-            log("Coremetrics Element: Category: " + cat + " ID: " + id);
+            bl.utils.log("Coremetrics Element: Category: " + cat + " ID: " + id);
         } catch (e) {
-            log("cmCreatePageElementTag Error: " + e);
+            bl.utils.log("cmCreatePageElementTag Error: " + e);
         }
     }
 
@@ -218,7 +198,7 @@ window.bl = window.bl || {};
 
     // public methods
     ns.init = function(settings) {
-        options = extend(options, settings);
+        options = window.bl.utils.extend(options, settings);
         init();
     };
     ns.fireTag = function(params) {
@@ -238,4 +218,4 @@ window.bl = window.bl || {};
     ns.libraryFound = function () {
         return libraryFound;
     };
-})(window.bl.coremetrics = window.bl.coremetrics || {});
+})(window.bl.coremetrics = window.bl.coremetrics || {}, window.bl);

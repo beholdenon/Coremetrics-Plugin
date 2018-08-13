@@ -47,7 +47,7 @@ gulp.task('compress', function() {
     .pipe(gulp.dest('./dist/js/'))
 });
 gulp.task('scripts', function() {
-  return gulp.src(['./src/js/coremetrics_plugin.js'])
+  return gulp.src(['./src/js/bl.utils.js', './src/js/coremetrics_plugin.js'])
     .pipe(gulp.dest('./dist/js/'))
     .pipe(reload({ stream:true }));
 });

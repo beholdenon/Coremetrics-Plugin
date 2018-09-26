@@ -75,7 +75,7 @@ window.bl = window.bl || {};
     // test connection to bloomies and  coremetrics
     function checkForLibrary() {
         try {
-            if(window.BLOOMIES && window.BLOOMIES.coremetrics) {
+            if(BLOOMIES && BLOOMIES.coremetrics) {
                 return true;
             }
             else {
@@ -187,7 +187,7 @@ window.bl = window.bl || {};
     // call page view tag 
     function cmCreatePageviewTag(id, cat) {
         try {
-            window.BLOOMIES.coremetrics.cmCreatePageviewTag(id, cat, "", "");
+            BLOOMIES.coremetrics.cmCreatePageviewTag(id, cat, "", "");
             log("Coremetrics Page: Category: " + cat + " ID: " + id);
         } catch (e) {
             log("cmCreatePageviewTag Error: " + e);
@@ -197,7 +197,7 @@ window.bl = window.bl || {};
     // call element tag
     function cmCreatePageElementTag(id, cat) {
         try {
-            window.BLOOMIES.coremetrics.cmCreatePageElementTag(id, cat);
+            BLOOMIES.coremetrics.cmCreatePageElementTag(id, cat);
             log("Coremetrics Element: Category: " + cat + " ID: " + id);
         } catch (e) {
             log("cmCreatePageElementTag Error: " + e);

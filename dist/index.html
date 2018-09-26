@@ -15,8 +15,12 @@
         /* testing hack so application initiates coremetrics */
         BLOOMIES = {};
         BLOOMIES.coremetrics = {};
-        BLOOMIES.coremetrics.cmCreatePageviewTag = function() {};
-        BLOOMIES.coremetrics.cmCreatePageElementTag = function() {};
+        BLOOMIES.coremetrics.cmCreatePageviewTag = function(id, cat) {
+            alert("cmCreatePageviewTag " + id + " " + cat);
+        };
+        BLOOMIES.coremetrics.cmCreatePageElementTag = function(id, cat) {
+            alert("cmCreatePageElementTag " + id + " " + cat);
+        };
         BLOOMIES.coremetrics.exploreAttributes = function() {};
         window.cmSetTest = function() {}
         window.cmSetProduction = function() {}
